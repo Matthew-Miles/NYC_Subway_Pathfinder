@@ -249,7 +249,7 @@ class Transit {
         }
 
 
-        // TODO: Dijksta's Shortest Path Algorithm
+        // TODO: Dijkstra's Shortest Path Algorithm
         // Determines shortest route, then prints route and the time to perform the algorithm.
         int shortest_path_dijkstra(string stopA, string stopB) {
             //source vertex
