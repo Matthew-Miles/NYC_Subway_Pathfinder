@@ -23,7 +23,7 @@ name (string) => stop_id (string)
 - Again, a separate map is necessary for fast and easy access to existing stops from the CLI string input.
 
 4. All transit functionality within Transit class
-- insertRoute, getAdjacent, getStopName, getStopID, shortest path algorithms (Dijksta, A* Search)
+- insertRoute, getAdjacent, getStopName, getStopID, shortest path algorithms (Dijkstra, A* Search)
 - constructor Transit(filepath) handles GTFS parsing and map populating
 
 5. CLI menu
@@ -88,12 +88,12 @@ int main() {
 
         // Calculation & Output
         cout << endl;
-        cout << "Fastest Route: " << "<insert path here>" << endl;
+        cout << "Dijkstra's Fastest Route: " << transit.shortest_path_dijkstra(stopA_name, stopB_name) << endl;
         cout << "A* Fastest Route: " << get<0>(a_star_calc) << endl;
-        cout << "Estimated Route Time: " << transit.shortest_path_dijkstra(stopA_id, stopB_id) << endl;
+        cout << "Dijkstra's Estimated Route Time: " << transit.shortest_path_dijkstra(stopA_name, stopB_name) << endl;
         cout << "A* Estimated Route Time: " << get<1>(a_star_calc) << endl;
-        cout << "Dijksta's Algorithm runtime: " << endl;
-        cout << "A* Search Algorithm runtime: " << get<2>(a_star_calc).count() << "microseconds" << endl;
+        cout << "Dijkstra's Algorithm runtime: " << endl;
+        cout << "A* Search Algorithm runtime: " << get<2>(a_star_calc).count() << " microseconds" << endl;
         cout << endl;
 
         // cout << "Exit application? (y to exit, any other character to find new route)" << endl;
