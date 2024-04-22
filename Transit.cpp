@@ -16,6 +16,7 @@
 #include <utility>
 #include <chrono>
 #include <cmath>
+#include <tuple>
 
 using namespace std;
 
@@ -251,7 +252,9 @@ class Transit {
 
         // TODO: Dijkstra's Shortest Path Algorithm
         // Determines shortest route, then prints route and the time to perform the algorithm.
-        int shortest_path_dijkstra(string stopA, string stopB) {
+        tuple<vector<string>, float, chrono::microseconds> shortest_path_dijkstra(string stopA, string stopB) {
+            auto start = chrono::high_resolution_clock::now(); 
+
             //source vertex
             string src = stopA;
 
@@ -294,8 +297,12 @@ class Transit {
 
             }
 
+            auto end = chrono::high_resolution_clock::now(); 
+            auto runTime = chrono::duration_cast<chrono::microseconds>(end - start);
             //return the distance to the stop specified
-            return dist[stopB];
+            //<pathing, path time, runtime>
+
+            return make_tuple(get_shortest_path(pred, stopB, stopA), dist[stopB], runTime);
         }
 
         // get heuristic by using stop time to calculate how long it will take to get from start to end
@@ -315,21 +322,23 @@ class Transit {
             return abs(x1 - x2) + abs(y1 - y2);
         }
 
-        string get_shortest_path(unordered_map<string, string>& preds, string curr_stop, string start_stop) {
-            string shortest_path = curr_stop + " ";
+        vector<string> get_shortest_path(unordered_map<string, string>& preds, string& curr_stop, string& start_stop) {
+            vector<string> shortest_path = {curr_stop};
             while (curr_stop != start_stop) {
-                shortest_path.append(preds[curr_stop] + " ");
+                shortest_path.push_back(preds[curr_stop]);
                 curr_stop = preds[curr_stop];
             }
 
-            return string(shortest_path.rbegin(), shortest_path.rend());
+            reverse(shortest_path.begin(), shortest_path.end());
+
+            return shortest_path;
         }
 
 
         // TODO: A* Search Shortest Path Algorithm
         // Determines shortest route, then prints route and the time to perform the algorithm.
         // returns tuple<path, time, run_time>
-        tuple<string, float, chrono::microseconds> shortest_path_a_star(string stopA, string stopB) {
+        tuple<vector<string>, float, chrono::microseconds> shortest_path_a_star(string stopA, string stopB) {
             auto start = chrono::high_resolution_clock::now(); 
             int count = 0; // use count for tie breaker if something is already in the pq it takes precidence
             string start_stop = stopA;
@@ -386,6 +395,7 @@ class Transit {
 
             auto stop = chrono::high_resolution_clock::now(); 
             auto run_time = chrono::duration_cast<chrono::microseconds>(stop - start);
-            return make_tuple("Path does not exist from " + start_stop + " to " + end_stop, 0.0, run_time);
+            vector<string> empty = {};
+            return make_tuple(empty, 0.0, run_time);
         };
 };
