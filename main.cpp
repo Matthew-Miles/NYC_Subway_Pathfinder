@@ -96,14 +96,14 @@ int main() {
         cout << "A* Search Algorithm runtime: " << get<2>(a_star_calc).count() << " microseconds" << endl;
         cout << endl;
 
-        // cout << "Exit application? (y to exit, any other character to find new route)" << endl;
-        // getline(cin, exit);
+        cout << "Exit application? (y to exit, any other character to find new route)" << endl;
+        getline(cin, exit);
 
-        // // Termination
-        // if (exit == "y") {
-        //     cout << "Exiting application..." << endl; 
-        //     break;
-        // }
+        // Termination
+        if (exit == "y") {
+            cout << "Exiting application..." << endl; 
+            break;
+        }
     }
     
     return 0;
