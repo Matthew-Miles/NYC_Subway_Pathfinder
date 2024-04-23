@@ -16,6 +16,7 @@
 #include <utility>
 #include <chrono>
 #include <cmath>
+#include <tuple>
 
 using namespace std;
 
@@ -251,7 +252,9 @@ class Transit {
 
         // TODO: Dijkstra's Shortest Path Algorithm
         // Determines shortest route, then prints route and the time to perform the algorithm.
-        int shortest_path_dijkstra(string stopA, string stopB) {
+        tuple<vector<string>, float, chrono::microseconds> shortest_path_dijkstra(string stopA, string stopB) {
+            auto start = chrono::high_resolution_clock::now(); 
+
             //source vertex
             string src = stopA;
 
@@ -294,8 +297,12 @@ class Transit {
 
             }
 
+            auto end = chrono::high_resolution_clock::now(); 
+            auto runTime = chrono::duration_cast<chrono::microseconds>(end - start);
             //return the distance to the stop specified
-            return dist[stopB];
+            //<pathing, path time, runtime>
+
+            return make_tuple(get_shortest_path(pred, stopB, stopA), dist[stopB], runTime);
         }
 
         // get heuristic by using stop time to calculate how long it will take to get from start to end
@@ -353,11 +360,38 @@ class Transit {
             return distance;
         }
 
+        // Using positon (lat, lon) and the Haversine Formula to calculate the Heuristic
+        double get_pos_haversine_heuristic(string& start_stop, string& end_stop) {
+            const double R = 6371000.0; // Earth radius in meters
+            const double pi = 3.14159265358979323866;
+
+            // Get lat and long
+            double start_lat = get<0>(stop_pos_map[start_stop]);
+            double start_lon = get<1>(stop_pos_map[start_stop]);
+            double end_lat = get<0>(stop_pos_map[end_stop]);
+            double end_lon = get<1>(stop_pos_map[end_stop]);
+
+            // Convert lat and long from degrees to radians
+            double phi1 = start_lat * pi / 180.0;
+            double phi2 = end_lat * pi / 180.0;
+            double deltaPhi = (end_lat - start_lat) * pi / 180.0;
+            double deltaLambda = (end_lon - start_lon) * pi / 180.0;
+
+            // Calculate Haversine formula components
+            double a = sin(deltaPhi / 2) * sin(deltaPhi / 2) +
+                       cos(phi1) * cos(phi2) *
+                       sin(deltaLambda / 2) * sin(deltaLambda / 2);
+            double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+            // Calculate distance
+            double distance = R * c;
+            return distance;
+        }
 
         // TODO: A* Search Shortest Path Algorithm
         // Determines shortest route, then prints route and the time to perform the algorithm.
         // returns tuple<path, time, run_time>
-        tuple<string, float, chrono::microseconds> shortest_path_a_star(string stopA, string stopB) {
+        tuple<vector<string>, float, chrono::microseconds> shortest_path_a_star(string stopA, string stopB) {
             auto start = chrono::high_resolution_clock::now(); 
             int count = 0; // use count for tie breaker if something is already in the pq it takes precidence
             string start_stop = stopA;
@@ -414,6 +448,7 @@ class Transit {
 
             auto stop = chrono::high_resolution_clock::now(); 
             auto run_time = chrono::duration_cast<chrono::microseconds>(stop - start);
-            return make_tuple("Path does not exist from " + start_stop + " to " + end_stop, 0.0, run_time);
+            vector<string> empty = {};
+            return make_tuple(empty, 0.0, run_time);
         };
 };

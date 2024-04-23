@@ -37,11 +37,25 @@ This will remain rooted in the main function.
 
 #include "Transit.cpp"
 
+
+string secondsToHMSFormat(float seconds) {
+    int hours = seconds / 3600;
+    int minutes = (seconds - hours * 3600) / 60;
+    int secs = seconds - (hours * 3600 + minutes * 60);
+
+    std::ostringstream oss;
+    oss << std::setfill('0') << std::setw(2) << hours << " H " << ": "
+        << std::setw(2) << minutes << " M " << ": "
+        << std::setw(2) << secs << " S ";
+    
+    return oss.str();
+}
+
 int main() {
     // string STOPS_FILE = "mock_data/stops.txt"; // default: "transit_data/stops.txt"
     string STOPS_FILE = "transit_data/stops.txt";
     // string STOP_TIMES_FILE = "mock_data/stop_times_debug.txt"; // default: "transit_data/stop_times.txt"
-    string STOP_TIMES_FILE = "transit_data/stop_times.txt";
+    string STOP_TIMES_FILE = "transit_data/stop_times_debug.txt";
 
     Transit transit(STOPS_FILE, STOP_TIMES_FILE);
 
@@ -83,18 +97,40 @@ int main() {
 
         // A* Calculation
         // returns pair<path, time>
-        tuple<string, float, chrono::microseconds> a_star_calc = transit.shortest_path_a_star(stopA_name, stopB_name);
+        
+        tuple<vector<string>, float, chrono::microseconds> a_star_calc = transit.shortest_path_a_star(stopA_name, stopB_name);
+        tuple<vector<string>, float, chrono::microseconds> dijkstrasCalc = transit.shortest_path_a_star(stopA_name, stopB_name);
 
-
+        
         // Calculation & Output
         cout << endl;
-        cout << "Dijkstra's Fastest Route: " << transit.shortest_path_dijkstra(stopA_name, stopB_name) << endl;
-        cout << "A* Fastest Route: " << get<0>(a_star_calc) << endl;
-        cout << "Dijkstra's Estimated Route Time: " << transit.shortest_path_dijkstra(stopA_name, stopB_name) << endl;
-        cout << "A* Estimated Route Time: " << get<1>(a_star_calc) << endl;
-        cout << "Dijkstra's Algorithm runtime: " << endl;
+        cout << "A* Fastest pathing: ";
+        for (auto i : get<0>(a_star_calc)) {
+            if (!(get<0>(a_star_calc).at(get<0>(a_star_calc).size() - 1) == i)) {
+                cout << i << " -> ";
+            }
+            else {
+                cout << i;
+            }
+        }
+        cout << endl;
+        cout << "A* Estimated Route Time: " << secondsToHMSFormat(get<1>(a_star_calc)) << endl;
         cout << "A* Search Algorithm runtime: " << get<2>(a_star_calc).count() << " microseconds" << endl;
         cout << endl;
+        cout << "Dijkstra's Fastest pathing: ";
+        for (auto i : get<0>(dijkstrasCalc)) {
+            if (!(get<0>(dijkstrasCalc).at(get<0>(dijkstrasCalc).size() - 1) == i)) {
+                cout << i << " -> ";
+            }
+            else {
+                cout << i;
+            }
+        }
+        cout << endl;
+        cout << "Dijkstra's Estimated Route Time: " << secondsToHMSFormat(get<1>(dijkstrasCalc)) << endl;
+        cout << "Dijkstra's Algorithm runtime: " << get<2>(dijkstrasCalc).count() << " microseconds" << endl;
+        cout << endl;
+
 
         cout << "Exit application? (y to exit, any other character to find new route)" << endl;
         getline(cin, exit);
