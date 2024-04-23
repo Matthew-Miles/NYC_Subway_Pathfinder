@@ -368,7 +368,7 @@ class Transit {
             }
 
             time[start_stop] = 0;
-            heur[start_stop] = get_pos_heuristic(start_stop, end_stop);
+            heur[start_stop] = get_pos_haversine_heuristic(start_stop, end_stop);
             unordered_set<string> pq_ref_set = {start_stop}; // helps us see what is in the priority queue
 
             while (!pq_ref_set.empty()) {
