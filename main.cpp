@@ -98,35 +98,19 @@ int main() {
         // A* Calculation
         // returns pair<path, time>
         
-        tuple<vector<string>, float, chrono::microseconds> a_star_calc = transit.shortest_path_a_star(stopA_name, stopB_name);
-        tuple<vector<string>, float, chrono::microseconds> dijkstrasCalc = transit.shortest_path_a_star(stopA_name, stopB_name);
+        tuple<string, float, chrono::microseconds> a_star_calc = transit.shortest_path_a_star(stopA_name, stopB_name);
+        tuple<string, float, chrono::microseconds> dijkstrasCalc = transit.shortest_path_dijkstra(stopA_name, stopB_name);
 
         
         // Calculation & Output
         cout << endl;
         cout << "A* Fastest pathing: ";
-        for (auto i : get<0>(a_star_calc)) {
-            if (!(get<0>(a_star_calc).at(get<0>(a_star_calc).size() - 1) == i)) {
-                cout << i << " -> ";
-            }
-            else {
-                cout << i;
-            }
-        }
-        cout << endl;
+        cout << get<0>(a_star_calc) << endl;
         cout << "A* Estimated Route Time: " << secondsToHMSFormat(get<1>(a_star_calc)) << endl;
         cout << "A* Search Algorithm runtime: " << get<2>(a_star_calc).count() << " microseconds" << endl;
         cout << endl;
         cout << "Dijkstra's Fastest pathing: ";
-        for (auto i : get<0>(dijkstrasCalc)) {
-            if (!(get<0>(dijkstrasCalc).at(get<0>(dijkstrasCalc).size() - 1) == i)) {
-                cout << i << " -> ";
-            }
-            else {
-                cout << i;
-            }
-        }
-        cout << endl;
+        cout << get<0>(dijkstrasCalc) << endl;
         cout << "Dijkstra's Estimated Route Time: " << secondsToHMSFormat(get<1>(dijkstrasCalc)) << endl;
         cout << "Dijkstra's Algorithm runtime: " << get<2>(dijkstrasCalc).count() << " microseconds" << endl;
         cout << endl;
