@@ -55,7 +55,7 @@ int main() {
     // string STOPS_FILE = "mock_data/stops.txt"; // default: "transit_data/stops.txt"
     string STOPS_FILE = "transit_data/stops.txt";
     // string STOP_TIMES_FILE = "mock_data/stop_times_debug.txt"; // default: "transit_data/stop_times.txt"
-    string STOP_TIMES_FILE = "transit_data/stop_times_debug.txt";
+    string STOP_TIMES_FILE = "transit_data/stop_times.txt";
 
     Transit transit(STOPS_FILE, STOP_TIMES_FILE);
 
@@ -72,7 +72,7 @@ int main() {
     while (true) {
         // User Input
         while (true) {
-            cout << "Enter your current location:" << endl;
+            cout << "Enter your destination:" << endl;
             getline(cin, stopA_name);
 
             if (transit.stopExists(stopA_name)) {
@@ -84,7 +84,7 @@ int main() {
         }
         
         while (true) {
-            cout << "Enter your destination:" << endl;
+            cout << "Enter your current location:" << endl;
             getline(cin, stopB_name);
 
             if (transit.stopExists(stopB_name)) {
