@@ -305,11 +305,6 @@ class Transit {
             return make_tuple(get_shortest_path(pred, stopB, stopA), dist[stopB], runTime);
         }
 
-        // get heuristic by using stop time to calculate how long it will take to get from start to end
-        // float get_time_heuristic(string& start_stop, string& end_stop) {
-        //     return stop_time_map[end_stop] - stop_time_map[start_stop];
-        // }
-
         // get heuristic by using position (lat, lon) to calculate the manhattan distance or "L distance"
         float get_pos_heuristic(string start_stop, string end_stop) {
             // x -> longitude, y -> latitude
