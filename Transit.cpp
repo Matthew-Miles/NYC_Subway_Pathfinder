@@ -305,18 +305,6 @@ class Transit {
             return make_tuple(get_shortest_path(pred, stopB, stopA), dist[stopB], runTime);
         }
 
-        // get heuristic by using position (lat, lon) to calculate the manhattan distance or "L distance"
-        float get_pos_heuristic(string start_stop, string end_stop) {
-            // x -> longitude, y -> latitude
-            float x1 = get<1>(stop_pos_map[start_stop]);
-            float y1 = get<0>(stop_pos_map[start_stop]);
-            float x2 = get<1>(stop_pos_map[end_stop]);
-            float y2 = get<0>(stop_pos_map[end_stop]);
-
-            // calculate and return manhattan distance
-            return abs(x1 - x2) + abs(y1 - y2);
-        }
-
         string get_shortest_path(unordered_map<string, string>& preds, string curr_stop, string start_stop) {
             string shortest_path = curr_stop;
             while (curr_stop != start_stop) {
